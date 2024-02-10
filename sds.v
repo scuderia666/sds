@@ -201,6 +201,31 @@ pub fn (mut a App) read_file(filename string) {
     a.files[filename] = file
 }
 
+pub fn (mut a App) print_rand_line(lines []string, count1 int) {
+    mut count := count1
+
+    if count > lines.len {
+        count = lines.len
+    } else if count < 1 {
+        count = 1
+    } else if count > 20 {
+        count = 20
+    }
+
+    mut i := 0
+
+    mut printed := []int{}
+
+    for i < count {
+        randval := rand.intn(lines.len) or {0}
+        if !printed.contains(randval) {
+            printed << randval
+            println(lines[randval])
+            i++
+        }
+    }
+}
+
 pub fn (mut a App) print_rand_snippets(snippets [][]string, count1 int) {
     mut count := count1
 
@@ -250,6 +275,20 @@ pub fn (mut a App) action(cmd string) {
                 a.read_file(args[0])
             }
 
+            "randline" {
+                lines := a.get_lines(file.main_lines)
+
+                mut count := 1
+
+                if args.len == 3 {
+                    if args[2].is_int() {
+                        count = args[2].int()
+                    }
+                }
+                
+                a.print_rand_line(lines, count)
+            }
+
             "snips" {
                 a.print_snippets(a.read_snippets(file.main_lines))
             }
@@ -275,6 +314,23 @@ pub fn (mut a App) action(cmd string) {
                 for line in a.get_lines(file.sects[args[2]]) {
                     println(line)
                 }
+            }
+
+            "sectrandline" {
+                if args.len < 3 { return }
+                if !(args[2] in file.sects.keys()) { return }
+
+                lines := a.get_lines(file.sects[args[2]])
+
+                mut count := 1
+
+                if args.len == 4 {
+                    if args[3].is_int() {
+                        count = args[3].int()
+                    }
+                }
+                
+                a.print_rand_line(lines, count)
             }
 
             "sectsnips" {

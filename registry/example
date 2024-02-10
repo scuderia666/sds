@@ -1,10 +1,10 @@
-Hello, welcome to sds. You can use "sectrandsnip" f.e: example sectrandsnip animes
+Hello, welcome to sds. You can use "sectrandline" f.e: example sectrandline animes
 
 [animes]
 death note
 charlotte
 
-[workspace projects]
+[projects]
 sds
 fischl
 
